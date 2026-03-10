@@ -1,26 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minijuegos Clásicos</title>
+    <title>Retro Flash Games Archive</title>
     <style>
-        /* Diseño de la página */
         body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; margin: 0; padding: 20px; text-align: center; }
         .header { margin-bottom: 20px; }
-        input[type="text"] { padding: 10px; width: 300px; border-radius: 5px; border: none; font-size: 16px; outline: none;}
-        .tags { margin: 15px 0; }
+        h1 { color: #ffcc00; font-size: 36px;}
+        input[type="text"] { padding: 12px; width: 350px; border-radius: 8px; border: none; font-size: 16px; outline: none; background: #333; color: white;}
+        .tags { margin: 20px 0; }
         button { padding: 8px 15px; margin: 5px; cursor: pointer; border-radius: 5px; border: none; background: #444; color: white; transition: 0.2s;}
         button:hover { background: #555; }
         button.active { background: #ffcc00; color: black; font-weight: bold; }
         .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px; }
-        .card { background: #333; padding: 15px; border-radius: 8px; width: 200px; cursor: pointer; transition: transform 0.2s; }
-        .card:hover { transform: scale(1.05); }
-        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 5px; background: #222; margin-bottom: 10px; }
-        .card h3 { margin: 0 0 5px 0; font-size: 18px; color: #ffcc00; }
-        .card small { color: #aaa; }
+        .card { background: #2a2a2a; padding: 15px; border-radius: 8px; width: 200px; cursor: pointer; transition: transform 0.2s; border: 1px solid #444;}
+        .card:hover { transform: translateY(-5px); border-color: #ffcc00;}
+        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 5px; background: #111; margin-bottom: 10px; }
+        .card h3 { margin: 0 0 5px 0; font-size: 18px; color: #fff; }
+        .card small { color: #888; text-transform: uppercase; font-size: 12px;}
         
-        /* Sección del emulador oculta por defecto */
         #player-section { display: none; margin-top: 20px; }
         #game-container { width: 800px; height: 600px; margin: 0 auto; background: black; border: 4px solid #555; border-radius: 8px; overflow: hidden;}
         .back-btn { margin-bottom: 15px; background: #ff3333; font-size: 16px; font-weight: bold;}
@@ -31,107 +30,108 @@
 
     <div id="main-section">
         <div class="header">
-            <h1>Portal Nostalgia</h1>
-            <input type="text" id="buscador" placeholder="Busca un juego... (ej: stick)">
+            <h1>🎮 Retro Flash Archive</h1>
+            <input type="text" id="search-bar" placeholder="Search for a game... (e.g., stickman)">
         </div>
 
-        <div class="tags" id="contenedor-etiquetas">
+        <div class="tags" id="tags-container">
             </div>
 
-        <div class="grid" id="contenedor-juegos">
+        <div class="grid" id="games-container">
             </div>
     </div>
 
     <div id="player-section">
-        <button class="back-btn" onclick="volverInicio()">⬅ Volver al Catálogo</button>
+        <button class="back-btn" onclick="goBack()">⬅ Back to Games Menu</button>
         <div id="game-container"></div>
     </div>
 
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <script>
-        // --- 1. TU BASE DE DATOS DE JUEGOS ---
-        // Aquí es donde añadirás más juegos en el futuro
-        const catalogo = [
+        // ==========================================
+        // HOW TO ADD GAMES IN THE FUTURE
+        // ==========================================
+        // Every time someone on TikTok asks for a game, just copy one of these blocks {}
+        // and add it to the list. The website will automatically update!
+        
+        const gamesCatalog = [
             {
-                nombre: "Stickman Empires",
-                etiquetas: ["estrategia", "stickman"],
-                imagen: "https://via.placeholder.com/200x120/444444/ffcc00?text=Stickman", // Puedes subir tus propias fotos luego
-                tipo: "local", // "local" significa que tienes el archivo .swf
-                archivo: "stickman.swf"
+                name: "Stickman Empires",
+                tags: ["strategy", "stickman"],
+                image: "https://via.placeholder.com/200x120/444444/ffcc00?text=Stickman",
+                type: "local", 
+                file: "stickman.swf" // Make sure this EXACT file name is in your GitHub
             },
             {
-                nombre: "Fireboy and Watergirl",
-                etiquetas: ["puzzle", "cooperativo"],
-                imagen: "https://via.placeholder.com/200x120/444444/00ccff?text=Fuego+y+Agua",
-                tipo: "enlace", // "enlace" significa que manda a otra web
-                archivo: "https://www.minijuegos.com/juego/fireboy-and-watergirl" // Ejemplo
+                name: "Fireboy and Watergirl",
+                tags: ["puzzle", "co-op"],
+                image: "https://via.placeholder.com/200x120/444444/00ccff?text=Fire+Water",
+                type: "link", // Use "link" if you don't have the .swf and want to link out
+                file: "https://www.crazygames.com/game/fireboy-and-watergirl-the-forest-temple"
             },
             {
-                nombre: "Defiende la Torre",
-                etiquetas: ["estrategia", "tower defense"],
-                imagen: "https://via.placeholder.com/200x120/444444/ff5555?text=Tower+Defense",
-                tipo: "enlace",
-                archivo: "https://www.ejemplo.com"
+                name: "Bloons Tower Defense",
+                tags: ["strategy", "tower defense"],
+                image: "https://via.placeholder.com/200x120/444444/55ff55?text=Bloons",
+                type: "local",
+                file: "bloons.swf"
             }
         ];
 
-        // --- 2. LÓGICA DEL BUSCADOR Y ETIQUETAS ---
-        let etiquetaActiva = null;
+        // ==========================================
+        // ENGINE LOGIC (DO NOT TOUCH)
+        // ==========================================
+        let activeTag = null;
 
-        function renderizarJuegos(filtroTexto = "") {
-            const contenedor = document.getElementById("contenedor-juegos");
-            contenedor.innerHTML = ""; // Limpia la pantalla
-            
-            const textoLimpio = filtroTexto.toLowerCase().trim(); // Ignora mayúsculas y espacios
+        function renderGames(searchText = "") {
+            const container = document.getElementById("games-container");
+            container.innerHTML = ""; 
+            const cleanText = searchText.toLowerCase().trim();
 
-            catalogo.forEach(juego => {
-                const coincideTexto = juego.nombre.toLowerCase().includes(textoLimpio);
-                const coincideEtiqueta = !etiquetaActiva || juego.etiquetas.includes(etiquetaActiva);
+            gamesCatalog.forEach(game => {
+                const matchText = game.name.toLowerCase().includes(cleanText);
+                const matchTag = !activeTag || game.tags.includes(activeTag);
 
-                // Si cumple las condiciones del buscador, dibuja la tarjeta
-                if (coincideTexto && coincideEtiqueta) {
+                if (matchText && matchTag) {
                     const div = document.createElement("div");
                     div.className = "card";
                     div.innerHTML = `
-                        <img src="${juego.imagen}" alt="${juego.nombre}">
-                        <h3>${juego.nombre}</h3>
-                        <small>${juego.etiquetas.join(", ")}</small>
+                        <img src="${game.image}" alt="${game.name}">
+                        <h3>${game.name}</h3>
+                        <small>${game.tags.join(" • ")}</small>
                     `;
-                    div.onclick = () => abrirJuego(juego);
-                    contenedor.appendChild(div);
+                    div.onclick = () => openGame(game);
+                    container.appendChild(div);
                 }
             });
         }
 
-        function renderizarEtiquetas() {
-            const contenedor = document.getElementById("contenedor-etiquetas");
-            // Saca una lista de etiquetas únicas automáticamente
-            const todasLasEtiquetas = [...new Set(catalogo.flatMap(j => j.etiquetas))];
+        function renderTags() {
+            const container = document.getElementById("tags-container");
+            const allTags = [...new Set(gamesCatalog.flatMap(g => g.tags))];
 
-            todasLasEtiquetas.forEach(tag => {
+            allTags.forEach(tag => {
                 const btn = document.createElement("button");
-                btn.innerText = tag;
+                btn.innerText = tag.toUpperCase();
                 btn.onclick = () => {
-                    if (etiquetaActiva === tag) {
-                        etiquetaActiva = null; // Quita el filtro si le vuelves a dar
+                    if (activeTag === tag) {
+                        activeTag = null;
                         btn.classList.remove("active");
                     } else {
-                        etiquetaActiva = tag; // Aplica el filtro
+                        activeTag = tag;
                         document.querySelectorAll(".tags button").forEach(b => b.classList.remove("active"));
                         btn.classList.add("active");
                     }
-                    renderizarJuegos(document.getElementById("buscador").value);
+                    renderGames(document.getElementById("search-bar").value);
                 };
-                contenedor.appendChild(btn);
+                container.appendChild(btn);
             });
         }
 
-        // --- 3. LÓGICA DEL EMULADOR ---
-        function abrirJuego(juego) {
-            if (juego.tipo === "enlace") {
-                window.open(juego.archivo, "_blank"); // Abre en pestaña nueva
-            } else if (juego.tipo === "local") {
-                // Oculta el catálogo y muestra la pantalla negra del juego
+        function openGame(game) {
+            if (game.type === "link") {
+                window.open(game.file, "_blank");
+            } else if (game.type === "local") {
                 document.getElementById("main-section").style.display = "none";
                 document.getElementById("player-section").style.display = "block";
                 
@@ -141,28 +141,24 @@
                 const ruffle = window.RufflePlayer.newest();
                 const player = ruffle.createPlayer();
                 container.appendChild(player);
-                player.load(juego.archivo);
+                player.load(game.file);
                 player.style.width = "100%";
                 player.style.height = "100%";
             }
         }
 
-        function volverInicio() {
-            // Vuelve al catálogo y apaga el juego para que no suene de fondo
+        function goBack() {
             document.getElementById("main-section").style.display = "block";
             document.getElementById("player-section").style.display = "none";
             document.getElementById("game-container").innerHTML = ""; 
         }
 
-        // --- 4. ARRANQUE ---
-        // Escucha cada vez que escribes en el buscador
-        document.getElementById("buscador").addEventListener("input", (e) => {
-            renderizarJuegos(e.target.value);
+        document.getElementById("search-bar").addEventListener("input", (e) => {
+            renderGames(e.target.value);
         });
 
-        // Construye la página por primera vez
-        renderizarEtiquetas();
-        renderizarJuegos();
+        renderTags();
+        renderGames();
     </script>
 </body>
 </html>
