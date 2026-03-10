@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Stickman Empires",
+        "tags": ["strategy", "stickman"],
+        "image": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=400&h=250",
+        "type": "local",
+        "file": "stickman.swf"
+    },
+    {
+        "name": "Fireboy and Watergirl",
+        "tags": ["puzzle", "co-op"],
+        "image": "https://images.unsplash.com/photo-1614680376573-3e4e120f56f1?auto=format&fit=crop&q=80&w=400&h=250",
+        "type": "link",
+        "file": "https://www.crazygames.com/game/fireboy-and-watergirl-the-forest-temple"
+    },
+    {
+        "name": "Bloons Tower Defense",
+        "tags": ["strategy", "tower defense"],
+        "image": "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&q=80&w=400&h=250",
+        "type": "local",
+        "file": "bloons.swf"
+    }
+]
