@@ -131,49 +131,36 @@
     </div>
 
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <script>
         // ==========================================
-        // DATA: Todo en inglés como pediste
+        // VARIABLES GLOBALES
         // ==========================================
-        const gamesCatalog = [
-            {
-                name: "Stickman Empires",
-                tags: ["strategy", "stickman"],
-                image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=400&h=250",
-                type: "local", 
-                file: "stickman.swf" 
-            },
-            {
-                name: "Fireboy and Watergirl",
-                tags: ["puzzle", "co-op"],
-                image: "https://images.unsplash.com/photo-1614680376573-3e4e120f56f1?auto=format&fit=crop&q=80&w=400&h=250",
-                type: "link",
-                file: "https://www.crazygames.com/game/fireboy-and-watergirl-the-forest-temple"
-            },
-            {
-                name: "Bloons Tower Defense",
-                tags: ["strategy", "tower defense"],
-                image: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&q=80&w=400&h=250",
-                type: "local",
-                file: "bloons.swf"
-            }
-        ];
+        let gamesCatalog = []; // Ahora empieza vacío
+        let activeTags = [];
 
         // ==========================================
-        // NUEVA LÓGICA: Selección Múltiple de Etiquetas
+        // CONEXIÓN A TU ARCHIVO EXTERNO (El Fetch)
         // ==========================================
-        let activeTags = []; // Ahora es un Array, guarda varias etiquetas
+        fetch('games.json')
+            .then(response => response.json())
+            .then(data => {
+                gamesCatalog = data; // Guardamos los datos del JSON
+                renderTags();        // Dibujamos los botones
+                renderGames();       // Dibujamos los juegos
+            })
+            .catch(error => console.error('Error cargando los juegos:', error));
 
+        // ==========================================
+        // LÓGICA DE FILTROS Y BUSCADOR
+        // ==========================================
         function renderGames(searchText = "") {
             const container = document.getElementById("games-container");
             container.innerHTML = ""; 
             const cleanText = searchText.toLowerCase().trim();
 
             gamesCatalog.forEach(game => {
-                // Comprueba el texto del buscador
                 const matchText = game.name.toLowerCase().includes(cleanText);
-                
-                // Comprueba las etiquetas: El juego debe tener TODAS las etiquetas seleccionadas
                 const matchTags = activeTags.length === 0 || activeTags.every(tag => game.tags.includes(tag));
 
                 if (matchText && matchTags) {
@@ -199,12 +186,10 @@
                 btn.innerText = tag.toUpperCase();
                 
                 btn.onclick = () => {
-                    // Si la etiqueta ya estaba pulsada, la quitamos de la lista
                     if (activeTags.includes(tag)) {
                         activeTags = activeTags.filter(t => t !== tag);
                         btn.classList.remove("active");
                     } else {
-                        // Si no estaba pulsada, la añadimos a la lista
                         activeTags.push(tag);
                         btn.classList.add("active");
                     }
@@ -242,9 +227,7 @@
         document.getElementById("search-bar").addEventListener("input", (e) => {
             renderGames(e.target.value);
         });
-
-        renderTags();
-        renderGames();
     </script>
 </body>
 </html>
+
