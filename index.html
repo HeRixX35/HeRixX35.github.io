@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RetroFlash | Arcade Archive</title>
-    
     <link rel="icon" type="image/png" href="favicon.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@600&display=swap" rel="stylesheet">
     
     <style>
@@ -40,12 +38,8 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .logo-text {
@@ -56,148 +50,121 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .btn-request {
-            background: var(--primary);
+        /* Nuevo Buscador */
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
             color: white;
-            padding: 0.7rem 1.4rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
         }
 
-        .btn-request:hover {
-            transform: translateY(-2px);
-            background: var(--primary-hover);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        .search-bar:focus {
+            border-color: var(--primary);
         }
 
         main {
             flex: 1;
-            padding: 3rem 8%;
+            padding: 2rem 8%;
         }
 
-        .section-title {
-            font-family: 'Lexend', sans-serif;
+        /* Nuevos Filtros */
+        .filters-container {
+            display: flex;
+            gap: 0.8rem;
             margin-bottom: 2rem;
-            font-size: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
         }
 
         .card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .card img {
             width: 100%;
-            height: 160px;
+            height: 150px;
             object-fit: cover;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .card-info {
-            padding: 1.25rem;
-        }
-
-        .card-info h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-        }
-
-        .tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
+        .card-info { padding: 1rem; }
+        .card-info h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
+        
+        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; }
         .tag {
             background: rgba(129, 140, 248, 0.1);
             color: var(--primary);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
         }
 
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: #020617;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .footer-text {
-            color: #64748b;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* Contenedor del Emulador */
         #game-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.98);
-            z-index: 2000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.98); z-index: 2000; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-
-        #ruffle-player {
-            width: 90%;
-            max-width: 1000px;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 12px;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
-        }
-        
-        .close-overlay {
-            position: absolute;
-            top: 25px;
-            right: 35px;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            line-height: 1;
-        }
+        #ruffle-player { width: 90%; max-width: 1000px; aspect-ratio: 16 / 9; background: #000; border-radius: 12px; }
+        .close-overlay { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <span class="logo-text">RETROFLASH</span>
-    </div>
-    <a href="https://www.tiktok.com/@tu_usuario" class="btn-request" target="_blank">Pide un Juego</a>
+    <div class="logo-text">RETROFLASH</div>
+    <input type="text" id="search-input" class="search-bar" placeholder="Buscar juego...">
 </header>
 
 <main>
-    <h2 class="section-title">Archivo de Juegos Flash</h2>
+    <div class="filters-container" id="filters">
+        </div>
+    
     <div class="grid" id="game-grid">
         </div>
 </main>
@@ -207,66 +174,93 @@
     <div id="ruffle-player"></div>
 </div>
 
-<footer>
-    <div class="footer-text">
-        <p><strong>RetroFlash</strong> es un proyecto de preservación digital.</p>
-        <p style="font-size: 0.8rem;">Desarrollado con el motor Ruffle. Los derechos de cada juego pertenecen a sus creadores originales.</p>
-    </div>
-</footer>
-
 <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
 <script>
+    let allGames = [];
+    let currentFilter = 'Todos';
+
     const gameGrid = document.getElementById('game-grid');
+    const filtersContainer = document.getElementById('filters');
+    const searchInput = document.getElementById('search-input');
     const overlay = document.getElementById('game-overlay');
     const playerContainer = document.getElementById('ruffle-player');
 
-    // 1. Cargar la base de datos de juegos
+    // 1. Cargar datos
     fetch('games.json')
         .then(response => response.json())
         .then(games => {
-            games.forEach(game => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                // Generamos los tags
-                const tagsHTML = game.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-                
-                card.innerHTML = `
-                    <img src="${game.image}" alt="${game.name}">
-                    <div class="card-info">
-                        <h3>${game.name}</h3>
-                        <div class="tag-container">${tagsHTML}</div>
-                    </div>
-                `;
-                
-                card.onclick = () => launchGame(game.file);
-                gameGrid.appendChild(card);
-            });
-        })
-        .catch(err => console.error("Error cargando el catálogo:", err));
+            allGames = games;
+            generarFiltros();
+            renderizarJuegos();
+        });
 
-    // 2. Función para lanzar el emulador
-    function launchGame(swfFile) {
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Bloquea el scroll
+    // 2. Extraer categorías únicas y crear botones
+    function generarFiltros() {
+        const categorias = new Set(['Todos']); // 'Todos' siempre está
+        allGames.forEach(game => game.tags.forEach(tag => categorias.add(tag)));
 
-        const ruffle = window.RufflePlayer.newest();
-        const player = ruffle.createPlayer();
-        
-        playerContainer.innerHTML = '';
-        playerContainer.appendChild(player);
-        
-        player.load({
-            url: swfFile,
-            allowScriptAccess: true
+        categorias.forEach(categoria => {
+            const btn = document.createElement('button');
+            btn.className = `filter-btn ${categoria === 'Todos' ? 'active' : ''}`;
+            btn.innerText = categoria;
+            btn.onclick = () => {
+                // Quitar clase active de todos y ponérsela al pulsado
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentFilter = categoria;
+                renderizarJuegos();
+            };
+            filtersContainer.appendChild(btn);
         });
     }
 
-    // 3. Función para cerrar el juego
+    // 3. Pintar los juegos según buscador y filtros
+    function renderizarJuegos() {
+        gameGrid.innerHTML = '';
+        const textoBusqueda = searchInput.value.toLowerCase();
+
+        const juegosFiltrados = allGames.filter(game => {
+            const coincideFiltro = currentFilter === 'Todos' || game.tags.includes(currentFilter);
+            const coincideBusqueda = game.name.toLowerCase().includes(textoBusqueda);
+            return coincideFiltro && coincideBusqueda;
+        });
+
+        juegosFiltrados.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const tagsHTML = game.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            
+            card.innerHTML = `
+                <img src="${game.image}" alt="${game.name}">
+                <div class="card-info">
+                    <h3>${game.name}</h3>
+                    <div class="tag-container">${tagsHTML}</div>
+                </div>
+            `;
+            card.onclick = () => launchGame(game.file);
+            gameGrid.appendChild(card);
+        });
+    }
+
+    // Evento del buscador para que filtre mientras escribes
+    searchInput.addEventListener('input', renderizarJuegos);
+
+    // Funciones del Emulador
+    function launchGame(swfFile) {
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        playerContainer.innerHTML = '';
+        playerContainer.appendChild(player);
+        player.load({ url: swfFile, allowScriptAccess: true });
+    }
+
     function closeGame() {
         overlay.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Libera el scroll
+        document.body.style.overflow = 'auto';
         playerContainer.innerHTML = '';
     }
 </script>
