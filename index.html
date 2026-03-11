@@ -333,8 +333,17 @@
                     <div class="tag-container">${tagsHTML}</div>
                 </div>
             `;
-            card.onclick = () => launchGame(game.file);
+
+            card.onclick = () => {
+                if (game.type === "link") {
+                    window.open(game.file, '_blank');
+                } else {
+                    // Si no, abre el emulador Ruffle normal
+                    launchGame(game.file);
+                }
+            };
             gameGrid.appendChild(card);
+
         });
     }
 
@@ -378,4 +387,5 @@
     }
 </script>
 </body>
+
 </html>
