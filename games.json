@@ -22,14 +22,14 @@
     },
     {
         "name": "Siegius",
-        "tags": ["strategy"],
+        "tags": ["strategy", "War"],
         "image": "https://1.bp.blogspot.com/-XBz3t1KPCAw/Td6ocshlO3I/AAAAAAAAAgc/hKte1y1Erzs/s1600/siegius.jpg",
         "type": "local",
         "file": "juegos-swf/siegius.swf"
     },
     {
     "name": "Warfare 1917",
-    "tags": ["Estrategia", "Guerra"],
+    "tags": ["Estrategia", "War"],
     "image": "https://www.lemon-web.net/images/blog_articles/1233/Warfare-1917.jpg",
     "file": "juegos-swf/warfare-1917.swf"
     }
