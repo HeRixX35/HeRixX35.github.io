@@ -178,11 +178,15 @@
         }
 
         #ruffle-player {
-            width: 90%;
+            width: 90vw;
+            height: 85vh;
             max-width: 1000px;
-            aspect-ratio: 16 / 9;
             background: #000;
             border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
         .close-overlay {
@@ -331,6 +335,8 @@
         };
 
         playerContainer.innerHTML = '';
+        player.style.width = "100%";
+        player.style.height = "100%";
         playerContainer.appendChild(player);
         player.load({ url: swfFile, allowScriptAccess: true });
     }
